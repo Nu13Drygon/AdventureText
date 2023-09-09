@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adventure</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- The start of the game -->
+    <div id="introScreen">
+        <h1>Text Adventure</h1>
+        <button id="introStartBtn">Start</button>
+    </div>
+    <!-- Character Screen -->
+    <div id="characterCreationScreen">
+        <input id="characterNameInput" type="text" placeholder="Enter Name">
+        <ul id="characterInfoList">
+        </ul>
+        <button id="generateCharacterBtn">Generate Character</button>
+        <button id="characterConfirmBtn">Confirm Character?</button>
+    </div>
+    <!-- Game Area Display -->
+    <div id="gameAreaDisplay">
+        <p>Welcome To Victacus</p>
+        <!-- Logs are added dynamically -->
+        <ul id="gameLog"></ul>
+        <div id="characterControls">
+            <button id="exploreActionBtn">Explore</button>
+            <button id="attackActionBtn">Attack</button>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+body {
+    background-color: black;
+    color: white;
+}
+
+#characterCreationScreen {
+    display: none;
+}
+
+#gameAreaDisplay {
+    display: none;
+}
