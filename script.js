@@ -10,6 +10,7 @@ const characterConfirmBtn = document.getElementById('characterConfirmBtn')
 // Game Area
 const gameAreaDisplay = document.getElementById('gameAreaDisplay')
 const exploreActionBtn = document.getElementById('exploreActionBtn')
+const attackActionBtn = document.getElementById('attackActionBtn')
 const gameLog = document.getElementById('gameLog')
 
 // game Characters
@@ -21,17 +22,25 @@ let monster
 class Character {
     constructor(name) {
         this.name = name
-        this.hp = Math.floor(Math.random() * 201)
-        this.attack = Math.floor(Math.random() * 51)
+        this.hp = Math.floor(Math.random() * 25)
         this.actionMode = 'safe'
     }
     // this prevents the player using certain actions while attacking
     changeActionMode() {
-        if(this.actionMode = 'safe') {
-            this.actionMode = 'attack'
+        if(this.actionMode === 'safe') {
+            this.actionMode = 'danger'
         } else {
             this.actionMode = 'safe'
         }
+    }
+    rollDice() {
+        return Math.floor(Math.random() * 21)
+    }
+    attack() {
+        return Math.floor(Math.random() * 13)
+    }
+    defend() {
+        return Math.floor(Math.random() * 13)
     }
 }
 
@@ -73,7 +82,7 @@ generateCharacterBtn.addEventListener('click', () => {
     character = new Character(name)
 
 
-    displayCharacterInfoList(character)
+    displayCharacterInfoList()
 
 })
 
@@ -97,7 +106,14 @@ exploreActionBtn.addEventListener('click', () => {
     if(character.actionMode === 'safe'){
         generatePlayerEncounter()
     } else {
-        console.log('nothing')
+        console.log('you can not explore during battle')
+    }
+})
+
+attackActionBtn.addEventListener('click', () => {
+    if(character.actionMode === 'danger') {
+        console.log('attack')
+        calculateBattleDamage()
     }
 })
 
@@ -117,15 +133,15 @@ function displayCharacterInfoList(character) {
 function createLiforCharacterList(params) {
     let name = document.createElement('li')
     let hp = document.createElement('li')
-    let attack = document.createElement('li')
+
     
     name.innerText = `Name: ${character.name}`
     hp.innerText = `HP: ${character.hp}`
-    attack.innerText = `Attack: ${character.attack}`
+    
 
     characterInfoList.append(name)
     characterInfoList.append(hp)
-    characterInfoList.append(attack)
+
 }
 
 
@@ -136,9 +152,52 @@ function generatePlayerEncounter() {
     
     if(choosenEncounter === 'Monster') {
         character.changeActionMode()
+        createGameLog('You encounter a monster')
+        createMonster()
+        initiateBattle()
         
     } else if(choosenEncounter === 'Nothing') {
-        console.log('inside nothing')
+        createGameLog("You explore and find nothing")
+    }
+}
+
+function createGameLog(logText) {
+    let log = document.createElement('li')
+    log.innerText = logText
+    gameLog.append(log)
+}
+
+function createMonster() {
+    monster = new Monster
+}
+
+function initiateBattle() {
+    if(character.rollDice() >= monster.rollDice()) {
+        createGameLog("Player Turn Choose a Action")
+    } else if(character.rollDice() < monster.rollDice()) {
+        createGameLog('Monster Attacks')
+        calculateBattleDamage('monster')
+    }
+}
+
+
+function calculateBattleDamage(characterOrMonster) {
+    if(characterOrMonster === 'monster') {
+        let monsterDamage = monster.attack()
+        let characterDefense = character.defend()
+
+        if(monsterDamage <= characterDefense) {
+            createGameLog(`character defends ${characterDefense} against ${monsterDamage} damage`)
+            createGameLog(`Character suffers zero damage`)
+        } else {
+            let totalDamage = monsterDamage - characterDefense
+            character.hp = character.hp - totalDamage
+            createGameLog(`character suffers ${totalDamage} damage, loses HP`)
+        }
+
+    } else if(characterOrMonster === 'character') {
+        let characterDamage = character.attack()
+        let monsterDefense = monster.defend()
     }
 }
 
