@@ -10,3 +10,7 @@ body {
 #gameAreaDisplay {
     display: none;
 }
+
+#deathScreen {
+    display: none;
+}
