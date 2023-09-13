@@ -1,17 +1,11 @@
 // Start Screen
 const introStartBtn = document.getElementById('introStartBtn')
-const introScreen = document.getElementById('introScreen')
 // Character Creation
-const characterCreationScreen = document.getElementById('characterCreationScreen')
 const generateCharacterBtn = document.getElementById('generateCharacterBtn')
-const characterNameInput = document.getElementById('characterNameInput')
-const characterInfoList = document.getElementById('characterInfoList')
 const characterConfirmBtn = document.getElementById('characterConfirmBtn')
 // Game Area
-const gameAreaDisplay = document.getElementById('gameAreaDisplay')
 const exploreActionBtn = document.getElementById('exploreActionBtn')
 const attackActionBtn = document.getElementById('attackActionBtn')
-const characterControls = document.getElementById('characterControls')
 const gameLog = document.getElementById('gameLog')
 
 
@@ -61,17 +55,15 @@ class Monster extends Character {
 
 
 
-
 // INTRO SCREEN EVENTS AND FUNCTIONS
-        // introStartBtn.addEventListener('click', () => {
-        //     introScreen.style.display = 'none'
-        //     characterCreationScreen.style.display = 'block'
-        // })
 
-        // Auto Start for testing
 introStartBtn.addEventListener('click', autoStart())
 
+
 function autoStart() {
+    const introScreen = document.getElementById('introScreen')
+    const characterCreationScreen = document.getElementById('characterCreationScreen')
+
     introScreen.style.display = 'none'
     characterCreationScreen.style.display = 'block'
 }
@@ -79,6 +71,7 @@ function autoStart() {
 
 // CHARACTER CREATION EVENTS AND FUNCTIONS
 generateCharacterBtn.addEventListener('click', () => {
+    const characterNameInput = document.getElementById('characterNameInput')
     let name = characterNameInput.value ? characterNameInput.value : 'Unknown'
 
     character = new Character(name)
@@ -90,6 +83,7 @@ generateCharacterBtn.addEventListener('click', () => {
 
         //check if character was created before comfirming the switch the gameLog
 characterConfirmBtn.addEventListener('click', () => {
+    const gameAreaDisplay = document.getElementById('gameAreaDisplay')
     if(character === undefined) {
         if(characterCreationScreen.lastChild.nodeName !== "P") {
             let errorMessage = document.createElement('p')
@@ -104,6 +98,7 @@ characterConfirmBtn.addEventListener('click', () => {
 
 
 function displayCharacterInfoList(character) {
+    const characterInfoList = document.getElementById('characterInfoList')
     if(characterInfoList.childElementCount === 0) {
         createLiforCharacterList()
     } else {
@@ -114,7 +109,7 @@ function displayCharacterInfoList(character) {
     }
 }
 
-function createLiforCharacterList(params) {
+function createLiforCharacterList() {
     let name = document.createElement('li')
     let hp = document.createElement('li')
 
@@ -161,6 +156,7 @@ function generatePlayerEncounter() {
 }
 
 function createGameLog(logText) {
+    const gameLog = document.getElementById('gameLog')
     let log = document.createElement('li')
     log.innerText = logText
     gameLog.append(log)
@@ -172,17 +168,19 @@ function createMonster() {
 }
 
 function initiateBattle() {
-    let characterRoll = character.rollDice()
-    let monsterRoll = monster.rollDice()
-
-    if(characterRoll > monsterRoll) {
-        createGameLog("Player Turn Choose a Action")
-    } else if(characterRoll < monsterRoll) {
-        createGameLog('Monster Attacks')
-        calculateBattleDamage('monster')
-    } else if(characterRoll === monsterRoll) {
-        createGameLog('You and the monster are at a standoff')
-        initiateBattle()
+    if(character.hp > 0) {
+        let characterRoll = character.rollDice()
+        let monsterRoll = monster.rollDice()
+    
+        if(characterRoll > monsterRoll) {
+            createGameLog("Player Turn Choose a Action")
+        } else if(characterRoll < monsterRoll) {
+            createGameLog('Monster Attacks')
+            calculateBattleDamage('monster')
+        } else if(characterRoll === monsterRoll) {
+            createGameLog('You and the monster are at a standoff')
+            initiateBattle()
+        }
     }
 }
 
@@ -224,6 +222,7 @@ function calculateBattleDamage(characterOrMonster) {
 
 
 function checkCharacterDeath() {
+    const characterControls = document.getElementById('characterControls')
     if(character.hp <= 0) {
         characterControls.style.display = 'none'
         createGameLog('You died')
